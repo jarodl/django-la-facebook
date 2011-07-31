@@ -76,6 +76,16 @@ class OAuthAccess(object):
         except KeyError:
             return None
 
+    @property
+    def display(self):
+        """
+            accessor for display setting
+        """
+        try:
+            return settings.FACEBOOK_ACCESS_SETTINGS["DISPLAY"]
+        except KeyError:
+            return None
+
     def unauthorized_token(self):
         """
             This function may handle when a user does not authorize the app to access their facebook information.
@@ -234,6 +244,9 @@ class OAuthAccess(object):
             scope = self.provider_scope
             if scope is not None:
                 params["scope"] = ",".join(scope)
+            display = self.display
+            if dispaly is not None:
+                params["display"] = display
             return self.authorize_url + "?%s" % urllib.urlencode(params)
         else:
             request = oauth.Request.from_consumer_and_token(
